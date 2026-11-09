@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Telling the Time - Material Didáctico 8vo Año</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            past: '#10B981', // Verde esmeralda para PAST
+                            pastBg: '#ECFDF5',
+                            to: '#F97316',   // Naranja brillante para TO
+                            toBg: '#FFF7ED',
+                            accent: '#6366F1', // Indigo principal
+                            dark: '#0F172A'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom Styles for Interactive Clock Canvas */
+        .clock-canvas {
+            touch-action: none;
+        }
+
+        .tab-active {
+            border-bottom: 3px solid #6366F1;
+            color: #6366F1;
+            font-weight: 700;
+        }
+
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        /* Pulse animation for highlights */
+        @keyframes softPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .pulse-highlight {
+            animation: softPulse 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-indigo-600 to-violet-500 text-white p-2.5 rounded-2xl shadow-md">
+                    <i class="fa-solid font-bold fa-clock text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-display font-bold text-xl text-slate-900 tracking-tight leading-none">English Time Lab</h1>
+                    <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md mt-1 inline-block">8vo Año de Básica</span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex space-x-1 sm:space-x-4 text-xs sm:text-sm font-medium text-slate-600">
+                <a href="#concept" class="px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors">1. El Concepto</a>
+                <a href="#interactive" class="px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors">2. Reloj Interactivo</a>
+                <a href="#examples" class="px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors">3. Reglas Clave</a>
+                <a href="#quiz" class="px-3 py-2 rounded-xl bg-indigo-600 text-white font-semibold shadow-sm hover:bg-indigo-700 transition-colors">4. Práctica (Quiz)</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-16 w-full flex-grow">
+
+        <!-- HERO INTRO -->
+        <section class="text-center max-w-3xl mx-auto space-y-4 pt-4">
+            <span class="bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">Material Didáctico de Inglés</span>
+            <h2 class="font-display font-extrabold text-3xl sm:text-5xl text-slate-900 leading-tight">
+                ¡Aprender la hora en inglés es fácil y divertido! ⏰
+            </h2>
+            <p class="text-slate-600 text-base sm:text-lg">
+                Domina la lectura del reloj analógico y digital con esta guía interactiva paso a paso diseñada para estudiantes de 8vo año.
+            </p>
+        </section>
+
+        <!-- SECCIÓN 1: EL CONCEPTO FUNDAMENTAL (MAPA MENTAL DE PAST Y TO) -->
+        <section id="concept" class="scroll-mt-24 space-y-6">
+            <div class="border-l-4 border-indigo-600 pl-4">
+                <h3 class="font-display font-bold text-2xl text-slate-900">Paso 1: El Gran Secreto del Reloj</h3>
+                <p class="text-slate-600 text-sm sm:text-base">Imagina que el reloj es una pizza dividida exactamente por la mitad.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 items-center">
+                <!-- Infografía interactiva del mapa del reloj -->
+                <div class="bg-white p-6 rounded-3xl shadow-xl border border-slate-100 relative overflow-hidden flex flex-col items-center">
+                    <h4 class="font-display font-bold text-slate-800 mb-4 text-center">La Regla de los Dos Hemisferios</h4>
+                    
+                    <!-- Diagrama SVG Visual del Reloj Dividido -->
+                    <div class="relative w-72 h-72 sm:w-80 sm:h-80 my-2">
+                        <svg viewBox="0 0 300 300" class="w-full h-full drop-shadow-md">
+                            <!-- Fondo del Reloj -->
+                            <circle cx="150" cy="150" r="140" fill="#ffffff" stroke="#e2e8f0" stroke-width="6"/>
+                            
+                            <!-- Lado PAST (Verde) - Semicírculo Derecho -->
+                            <path d="M 150 10 A 140 140 0 0 1 150 290 Z" fill="rgba(16, 185, 129, 0.15)" stroke="#10B981" stroke-width="2" stroke-dasharray="4"/>
+                            
+                            <!-- Lado TO (Naranja) - Semicírculo Izquierdo -->
+                            <path d="M 150 290 A 140 140 0 0 1 150 10 Z" fill="rgba(249, 115, 22, 0.15)" stroke="#F97316" stroke-width="2" stroke-dasharray="4"/>
+
+                            <!-- Línea Divisional Central (12 a 6) -->
+                            <line x1="150" y1="15" x2="150" y2="285" stroke="#64748b" stroke-width="3" stroke-dasharray="6,6"/>
+
+                            <!-- Números principales -->
+                            <text x="150" y="45" font-family="Outfit" font-size="22" font-weight="bold" fill="#0f172a" text-anchor="middle">12</text>
+                            <text x="265" y="157" font-family="Outfit" font-size="22" font-weight="bold" fill="#10B981" text-anchor="middle">3</text>
+                            <text x="150" y="275" font-family="Outfit" font-size="22" font-weight="bold" fill="#0f172a" text-anchor="middle">6</text>
+                            <text x="35" y="157" font-family="Outfit" font-size="22" font-weight="bold" fill="#F97316" text-anchor="middle">9</text>
+
+                            <!-- Indicadores de Texto dentro del Diagrama -->
+                            <!-- Past Side -->
+                            <g transform="translate(200, 100)">
+                                <rect x="-35" y="-15" width="70" height="30" rx="8" fill="#10B981"/>
+                                <text x="0" y="5" font-family="Outfit" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">PAST</text>
+                            </g>
+                            <text x="210" y="190" font-family="Inter" font-size="11" font-weight="600" fill="#047857" text-anchor="middle">Minutos 01 al 30</text>
+                            <text x="210" y="205" font-family="Inter" font-size="10" fill="#047857" text-anchor="middle">"Pasaron de la hora"</text>
+
+                            <!-- To Side -->
+                            <g transform="translate(100, 100)">
+                                <rect x="-35" y="-15" width="70" height="30" rx="8" fill="#F97316"/>
+                                <text x="0" y="5" font-family="Outfit" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">TO</text>
+                            </g>
+                            <text x="90" y="190" font-family="Inter" font-size="11" font-weight="600" fill="#C2410C" text-anchor="middle">Minutos 31 al 59</text>
+                            <text x="90" y="205" font-family="Inter" font-size="10" fill="#C2410C" text-anchor="middle">"Faltan para la hora"</text>
+                        </svg>
+                    </div>
+
+                    <div class="flex gap-4 text-xs font-semibold mt-2">
+                        <div class="flex items-center gap-1.5 text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200">
+                            <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Lado Derecho = PAST
+                        </div>
+                        <div class="flex items-center gap-1.5 text-orange-700 bg-orange-50 px-3 py-1.5 rounded-lg border border-orange-200">
+                            <span class="w-3 h-3 rounded-full bg-orange-500 inline-block"></span> Lado Izquierdo = TO
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explicación de las 2 Formulas Básicas -->
+                <div class="space-y-4">
+                    <!-- Tarjeta Lado PAST -->
+                    <div class="bg-emerald-50/80 border-2 border-emerald-200 p-5 rounded-2xl space-y-2 relative">
+                        <div class="absolute -top-3 right-4 bg-emerald-600 text-white text-xs font-bold px-3 py-0.5 rounded-full uppercase">
+                            Del minuto 1 al 30
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="bg-emerald-500 text-white w-10 h-10 rounded-xl flex items-center justify-center text-xl font-bold">1</div>
+                            <h4 class="font-display font-bold text-lg text-emerald-950">Fórmula del lado PAST (Pasadas de la hora)</h4>
+                        </div>
+                        <p class="text-sm text-emerald-900 leading-relaxed pl-13">
+                            Decimos primero los <strong>minutos que pasaron</strong> y luego la <strong>hora actual</strong>.
+                        </p>
+                        <div class="bg-white p-3 rounded-xl border border-emerald-200 font-mono text-sm text-emerald-800">
+                            <span class="text-emerald-600 font-bold">It's</span> + [Minutos transcurridos] + <span class="bg-emerald-200 text-emerald-900 font-bold px-1.5 py-0.5 rounded">PAST</span> + [Hora actual]
+                        </div>
+                        <p class="text-xs text-emerald-700 font-medium">Ejemplo: <strong>4:10</strong> &rarr; <em>It's ten <strong>past</strong> four.</em> (Son 10 pasadas de las 4)</p>
+                    </div>
+
+                    <!-- Tarjeta Lado TO -->
+                    <div class="bg-orange-50/80 border-2 border-orange-200 p-5 rounded-2xl space-y-2 relative">
+                        <div class="absolute -top-3 right-4 bg-orange-600 text-white text-xs font-bold px-3 py-0.5 rounded-full uppercase">
+                            Del minuto 31 al 59
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="bg-orange-500 text-white w-10 h-10 rounded-xl flex items-center justify-center text-xl font-bold">2</div>
+                            <h4 class="font-display font-bold text-lg text-orange-950">Fórmula del lado TO (Faltan para la hora)</h4>
+                        </div>
+                        <p class="text-sm text-orange-900 leading-relaxed pl-13">
+                            Decimos los <strong>minutos que FALTAN</strong> para la siguiente hora y mencionamos la <strong>SIGUIENTE HORA</strong>.
+                        </p>
+                        <div class="bg-white p-3 rounded-xl border border-orange-200 font-mono text-sm text-orange-800">
+                            <span class="text-orange-600 font-bold">It's</span> + [Minutos que faltan] + <span class="bg-orange-200 text-orange-900 font-bold px-1.5 py-0.5 rounded">TO</span> + [Siguiente hora]
+                        </div>
+                        <p class="text-xs text-orange-700 font-medium">Ejemplo: <strong>4:50</strong> (Faltan 10 min para las 5) &rarr; <em>It's ten <strong>to</strong> five.</em></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: RELOJ INTERACTIVO -->
+        <section id="interactive" class="scroll-mt-24 space-y-6">
+            <div class="border-l-4 border-indigo-600 pl-4">
+                <h3 class="font-display font-bold text-2xl text-slate-900">Paso 2: Laboratorio Interactivo de Horas</h3>
+                <p class="text-slate-600 text-sm sm:text-base">Mueve los controles o usa los botones rápidos para ver cómo se escribe en inglés en tiempo real.</p>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-6 lg:p-8 grid lg:grid-cols-12 gap-8 items-center">
+                
+                <!-- Columna Izquierda: Simulador Analógico Dinámico -->
+                <div class="lg:col-span-5 flex flex-col items-center space-y-4">
+                    <div class="relative bg-slate-900 p-6 rounded-3xl shadow-2xl flex flex-col items-center w-full max-w-xs">
+                        
+                        <!-- Pantalla Digital Superior -->
+                        <div class="bg-slate-950 border border-slate-800 px-4 py-2 rounded-xl mb-4 text-center w-full">
+                            <span class="text-xs text-slate-400 font-mono uppercase tracking-widest block mb-0.5">Digital Time</span>
+                            <span id="digital-clock-display" class="text-3xl font-mono font-bold text-indigo-400 tracking-wider">03:15</span>
+                        </div>
+
+                        <!-- Canvas Reloj Analógico Dinámico -->
+                        <div class="relative w-56 h-56 bg-slate-800 rounded-full border-4 border-slate-700 flex items-center justify-center shadow-inner">
+                            <canvas id="clockCanvas" width="220" height="220" class="clock-canvas"></canvas>
+                        </div>
+
+                        <!-- Indicador visual PAST/TO badge -->
+                        <div class="mt-4">
+                            <span id="zone-badge" class="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500 text-white shadow-sm">
+                                Lado: PAST
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Controles y Traducción Oral -->
+                <div class="lg:col-span-7 space-y-6">
+                    
+                    <!-- Caja Resultante: Texto en Inglés -->
+                    <div class="bg-gradient-to-br from-indigo-950 to-slate-900 text-white p-6 rounded-2xl shadow-lg border border-indigo-900 space-y-3">
+                        <div class="flex justify-between items-center text-xs text-indigo-300 font-semibold uppercase tracking-wider">
+                            <span>¿Cómo se dice en inglés?</span>
+                            <span class="bg-indigo-800/60 text-indigo-200 px-2.5 py-0.5 rounded-md text-[10px]">Formato Tradicional</span>
+                        </div>
+                        <div id="english-time-output" class="text-2xl sm:text-3xl font-display font-extrabold text-white leading-tight min-h-[3.5rem] flex items-center">
+                            It's a quarter past three.
+                        </div>
+                        <div id="explanation-subtext" class="text-xs sm:text-sm text-indigo-200/80 border-t border-indigo-900/80 pt-2">
+                            Minutos 15 &rarr; Usamos <strong>a quarter past</strong> (un cuarto pasado de las 3).
+                        </div>
+                    </div>
+
+                    <!-- Controles Deslizantes de Hora y Minutos -->
+                    <div class="space-y-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <!-- Control de Hora -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-xs font-bold text-slate-700">
+                                <label for="hour-slider"><i class="fa-regular fa-clock text-indigo-600 mr-1"></i> Hora (Hour):</label>
+                                <span id="hour-val" class="font-mono text-indigo-600">3</span>
+                            </div>
+                            <input type="range" id="hour-slider" min="1" max="12" value="3" class="w-full accent-indigo-600 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <!-- Control de Minutos -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-xs font-bold text-slate-700">
+                                <label for="minute-slider"><i class="fa-solid fa-stopwatch text-indigo-600 mr-1"></i> Minutos (Minutes):</label>
+                                <span id="minute-val" class="font-mono text-indigo-600">15</span>
+                            </div>
+                            <input type="range" id="minute-slider" min="0" max="59" value="15" class="w-full accent-indigo-600 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+
+                    <!-- Botones de Acceso Rápido para Demostraciones -->
+                    <div>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">Ejemplos Rápidos de Clase:</span>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                            <button onclick="setTime(4, 0)" class="px-3 py-2 bg-white hover:bg-indigo-50 border border-slate-200 text-slate-700 font-semibold text-xs rounded-xl shadow-sm transition-all hover:border-indigo-300">
+                                4:00 (O'clock)
+                            </button>
+                            <button onclick="setTime(7, 15)" class="px-3 py-2 bg-white hover:bg-indigo-50 border border-slate-200 text-slate-700 font-semibold text-xs rounded-xl shadow-sm transition-all hover:border-indigo-300">
+                                7:15 (Quarter past)
+                            </button>
+                            <button onclick="setTime(9, 30)" class="px-3 py-2 bg-white hover:bg-indigo-50 border border-slate-200 text-slate-700 font-semibold text-xs rounded-xl shadow-sm transition-all hover:border-indigo-300">
+                                9:30 (Half past)
+                            </button>
+                            <button onclick="setTime(11, 45)" class="px-3 py-2 bg-white hover:bg-indigo-50 border border-slate-200 text-slate-700 font-semibold text-xs rounded-xl shadow-sm transition-all hover:border-indigo-300">
+                                11:45 (Quarter to)
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: TARJETAS DE EJEMPLOS VISUALES CLAVE -->
+        <section id="examples" class="scroll-mt-24 space-y-6">
+            <div class="border-l-4 border-indigo-600 pl-4">
+                <h3 class="font-display font-bold text-2xl text-slate-900">Paso 3: Las 5 Expresiones Clave</h3>
+                <p class="text-slate-600 text-sm sm:text-base">Guía de referencia rápida con las estructuras fundamentales que debes memorizar.</p>
+            </div>
+
+            <!-- Grid de 5 Tarjetas -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- Card 1: O'Clock -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-shadow space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="bg-slate-100 text-slate-800 text-xs font-bold px-2.5 py-1 rounded-lg">Hora Exacta (00 min)</span>
+                        <span class="font-mono font-bold text-indigo-600">5:00</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center border-2 border-slate-300 font-display font-bold text-slate-700">
+                            12:00
+                        </div>
+                        <div>
+                            <h4 class="font-display font-bold text-lg text-slate-900">O'CLOCK</h4>
+                            <p class="text-xs text-slate-500">Significa "en punto".</p>
+                        </div>
+                    </div>
+                    <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100 text-xs text-indigo-900 font-medium">
+                        "It's five <strong>o'clock</strong>."
+                    </div>
+                </div>
+
+                <!-- Card 2: Quarter Past -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-shadow space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-lg">Y Cuarto (15 min)</span>
+                        <span class="font-mono font-bold text-emerald-600">5:15</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center border-2 border-emerald-400 font-display font-bold text-emerald-800">
+                            +15 min
+                        </div>
+                        <div>
+                            <h4 class="font-display font-bold text-lg text-slate-900">A QUARTER PAST</h4>
+                            <p class="text-xs text-slate-500">Un cuarto pasado de...</p>
+                        </div>
+                    </div>
+                    <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100 text-xs text-emerald-900 font-medium">
+                        "It's <strong>a quarter past</strong> five."
+                    </div>
+                </div>
+
+                <!-- Card 3: Half Past -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-shadow space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-lg">Y Media (30 min)</span>
+                        <span class="font-mono font-bold text-emerald-600">5:30</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center border-2 border-emerald-400 font-display font-bold text-emerald-800">
+                            1/2
+                        </div>
+                        <div>
+                            <h4 class="font-display font-bold text-lg text-slate-900">HALF PAST</h4>
+                            <p class="text-xs text-slate-500">Media hora pasada de...</p>
+                        </div>
+                    </div>
+                    <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100 text-xs text-emerald-900 font-medium">
+                        "It's <strong>half past</strong> five."
+                    </div>
+                </div>
+
+                <!-- Card 4: Quarter To -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-shadow space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="bg-orange-100 text-orange-800 text-xs font-bold px-2.5 py-1 rounded-lg">Menos Cuarto (45 min)</span>
+                        <span class="font-mono font-bold text-orange-600">5:45</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center border-2 border-orange-400 font-display font-bold text-orange-800">
+                            -15 min
+                        </div>
+                        <div>
+                            <h4 class="font-display font-bold text-lg text-slate-900">A QUARTER TO</h4>
+                            <p class="text-xs text-slate-500">Falta un cuarto para...</p>
+                        </div>
+                    </div>
+                    <div class="bg-orange-50 p-3 rounded-xl border border-orange-100 text-xs text-orange-900 font-medium">
+                        "It's <strong>a quarter to six</strong>." <span class="block text-[10px] text-orange-700">(¡Avanza a la hora 6!)</span>
+                    </div>
+                </div>
+
+                <!-- Card 5: Minutos Intermedios (Past) -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-shadow space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-lg">Minutos Variados</span>
+                        <span class="font-mono font-bold text-emerald-600">8:10</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center border-2 border-emerald-300 font-display font-bold text-emerald-800">
+                            :10
+                        </div>
+                        <div>
+                            <h4 class="font-display font-bold text-lg text-slate-900">MINUTES PAST</h4>
+                            <p class="text-xs text-slate-500">Ejemplo 10 minutos pasados</p>
+                        </div>
+                    </div>
+                    <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100 text-xs text-emerald-900 font-medium">
+                        "It's <strong>ten past</strong> eight."
+                    </div>
+                </div>
+
+                <!-- Card 6: Minutos Intermedios (To) -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-shadow space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="bg-orange-100 text-orange-800 text-xs font-bold px-2.5 py-1 rounded-lg">Minutos Restantes</span>
+                        <span class="font-mono font-bold text-orange-600">8:50</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center border-2 border-orange-300 font-display font-bold text-orange-800">
+                            -10 min
+                        </div>
+                        <div>
+                            <h4 class="font-display font-bold text-lg text-slate-900">MINUTES TO</h4>
+                            <p class="text-xs text-slate-500">Faltan 10 min para las 9</p>
+                        </div>
+                    </div>
+                    <div class="bg-orange-50 p-3 rounded-xl border border-orange-100 text-xs text-orange-900 font-medium">
+                        "It's <strong>ten to nine</strong>."
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: PRÁCTICA E INTERACTIVIDAD (QUIZ EN TIEMPO REAL) -->
+        <section id="quiz" class="scroll-mt-24 space-y-6">
+            <div class="border-l-4 border-indigo-600 pl-4">
+                <h3 class="font-display font-bold text-2xl text-slate-900">Paso 4: Time Challenge! 🏆</h3>
+                <p class="text-slate-600 text-sm sm:text-base">Demuestra lo que aprendiste respondiendo estas 4 preguntas rápidas.</p>
+            </div>
+
+            <!-- Quiz Container -->
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-6 sm:p-8 max-w-3xl mx-auto space-y-6">
+                
+                <!-- Quiz Header Progress -->
+                <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-indigo-100 text-indigo-700 font-bold text-xs px-3 py-1 rounded-full">Pregunta <span id="current-q-num">1</span> de 4</span>
+                    </div>
+                    <div class="text-xs font-bold text-slate-500">
+                        Score: <span id="quiz-score" class="text-indigo-600 text-sm">0</span> / 4
+                    </div>
+                </div>
+
+                <!-- Active Question Content -->
+                <div id="quiz-question-card" class="space-y-6">
+                    <div class="flex flex-col sm:flex-row items-center gap-6 bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                        <!-- Clock Target for Question -->
+                        <div class="bg-slate-900 text-indigo-400 font-mono font-bold text-4xl px-6 py-4 rounded-2xl shadow-inner border border-slate-800">
+                            <span id="quiz-clock-display">02:15</span>
+                        </div>
+                        <div class="space-y-1 text-center sm:text-left">
+                            <h4 class="font-display font-bold text-lg text-slate-900">¿Cómo expresas esta hora correctamente?</h4>
+                            <p class="text-xs text-slate-500">Selecciona la opción correcta en inglés:</p>
+                        </div>
+                    </div>
+
+                    <!-- Options Grid -->
+                    <div id="quiz-options-container" class="grid sm:grid-cols-2 gap-3">
+                        <!-- Options will be dynamic -->
+                    </div>
+
+                    <!-- Feedback Alert Message -->
+                    <div id="quiz-feedback" class="hidden p-4 rounded-xl text-sm font-semibold flex items-center gap-3">
+                        <!-- Feedback content dynamically injected -->
+                    </div>
+                </div>
+
+                <!-- Quiz Next / Restart Controls -->
+                <div class="flex justify-end pt-2">
+                    <button id="next-btn" onclick="nextQuestion()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition-all text-sm">
+                        Siguiente Pregunta <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                    <button id="restart-btn" onclick="restartQuiz()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition-all text-sm">
+                        <i class="fa-solid fa-rotate-right mr-1"></i> Reiniciar Práctica
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800 mt-12">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
+            <div>
+                <p class="font-bold text-slate-200">Material Didáctico Didáctica del Inglés - 8vo Año</p>
+                <p class="text-slate-500 mt-0.5">Diseñado para el aprendizaje activo de la hora en educación básica.</p>
+            </div>
+            <div class="text-slate-500">
+                <span>Telling the Time &copy; Material Didáctico</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- ESTADO GLOBAL Y ELEMENTOS DOM ---
+        let currentHour = 3;
+        let currentMinute = 15;
+
+        const hourSlider = document.getElementById('hour-slider');
+        const minuteSlider = document.getElementById('minute-slider');
+        const hourValDisplay = document.getElementById('hour-val');
+        const minuteValDisplay = document.getElementById('minute-val');
+        const digitalClockDisplay = document.getElementById('digital-clock-display');
+        const englishOutput = document.getElementById('english-time-output');
+        const subtextOutput = document.getElementById('explanation-subtext');
+        const zoneBadge = document.getElementById('zone-badge');
+        const canvas = document.getElementById('clockCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Number words mapping for numbers up to 30
+        const numberWords = {
+            1: "one", 2: "two", 3: "three", 4: "four", 5: "five",
+            6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten",
+            11: "eleven", 12: "twelve", 13: "thirteen", 14: "fourteen",
+            15: "fifteen", 16: "sixteen", 17: "seventeen", 18: "eighteen",
+            19: "nineteen", 20: "twenty", 21: "twenty-one", 22: "twenty-two",
+            23: "twenty-three", 24: "twenty-four", 25: "twenty-five",
+            26: "twenty-six", 27: "twenty-seven", 28: "twenty-eight",
+            29: "twenty-nine", 30: "thirty"
+        };
+
+        // --- FUNCIONES DE CÁLCULO DE LA HORA EN INGLÉS ---
+        function getEnglishTime(h, m) {
+            let nextH = h % 12 + 1;
+            let currentHWord = numberWords[h];
+            let nextHWord = numberWords[nextH];
+
+            if (m === 0) {
+                return {
+                    text: `It's ${currentHWord} o'clock.`,
+                    subtext: `Minuto 00 &rarr; Usamos <strong>o'clock</strong> para horas exactas.`,
+                    zone: 'O\'CLOCK',
+                    color: 'bg-indigo-600'
+                };
+            } else if (m === 15) {
+                return {
+                    text: `It's a quarter past ${currentHWord}.`,
+                    subtext: `Minuto 15 &rarr; Usamos <strong>a quarter past</strong> (un cuarto pasado).`,
+                    zone: 'PAST',
+                    color: 'bg-emerald-500'
+                };
+            } else if (m === 30) {
+                return {
+                    text: `It's half past ${currentHWord}.`,
+                    subtext: `Minuto 30 &rarr; Usamos <strong>half past</strong> (media hora pasada).`,
+                    zone: 'PAST',
+                    color: 'bg-emerald-500'
+                };
+            } else if (m === 45) {
+                return {
+                    text: `It's a quarter to ${nextHWord}.`,
+                    subtext: `Minuto 45 &rarr; Usamos <strong>a quarter to</strong> y avanzamos a la siguiente hora (<strong>${nextHWord}</strong>).`,
+                    zone: 'TO',
+                    color: 'bg-orange-500'
+                };
+            } else if (m < 30) {
+                let minWord = numberWords[m];
+                let minLabel = (m === 1) ? 'minute' : 'minutes';
+                // Remove word 'minutes' for multiples of 5 for standard English
+                let phrase = (m % 5 === 0) ? `${minWord} past ${currentHWord}` : `${minWord} ${minLabel} past ${currentHWord}`;
+                return {
+                    text: `It's ${phrase}.`,
+                    subtext: `Minutos 01-29 &rarr; Lado <strong>PAST</strong>. Decimos los minutos transcurridos.`,
+                    zone: 'PAST',
+                    color: 'bg-emerald-500'
+                };
+            } else {
+                let minsToNext = 60 - m;
+                let minWord = numberWords[minsToNext];
+                let minLabel = (minsToNext === 1) ? 'minute' : 'minutes';
+                let phrase = (minsToNext % 5 === 0) ? `${minWord} to ${nextHWord}` : `${minWord} ${minLabel} to ${nextHWord}`;
+                return {
+                    text: `It's ${phrase}.`,
+                    subtext: `Minutos 31-59 &rarr; Lado <strong>TO</strong>. Faltan ${minsToNext} minutos para las <strong>${nextHWord}</strong>.`,
+                    zone: 'TO',
+                    color: 'bg-orange-500'
+                };
+            }
+        }
+
+        // --- REPO DE DIBUJO DEL RELOJ ANALÓGICO (CANVAS) ---
+        function drawClock() {
+            const width = canvas.width;
+            const height = canvas.height;
+            const radius = width / 2 - 10;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Trasladar al centro
+            ctx.save();
+            ctx.translate(width / 2, height / 2);
+
+            // Dibujar carátula
+            ctx.beginPath();
+            ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+            ctx.fillStyle = '#1e293b'; // Slate 800
+            ctx.fill();
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = '#334155';
+            ctx.stroke();
+
+            // Dibujar fondo de sectores PAST / TO suave
+            // Semicírculo Derecho (PAST)
+            ctx.beginPath();
+            ctx.arc(0, 0, radius - 4, -Math.PI / 2, Math.PI / 2);
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.08)';
+            ctx.fill();
+
+            // Semicírculo Izquierdo (TO)
+            ctx.beginPath();
+            ctx.arc(0, 0, radius - 4, Math.PI / 2, (3 * Math.PI) / 2);
+            ctx.fillStyle = 'rgba(249, 115, 22, 0.08)';
+            ctx.fill();
+
+            // Marcas numéricas
+            ctx.font = 'bold 12px Inter';
+            ctx.fillStyle = '#94a3b8';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            for (let num = 1; num <= 12; num++) {
+                let ang = (num * Math.PI) / 6;
+                ctx.rotate(ang);
+                ctx.translate(0, -radius + 20);
+                ctx.rotate(-ang);
+                ctx.fillText(num.toString(), 0, 0);
+                ctx.rotate(ang);
+                ctx.translate(0, radius - 20);
+                ctx.rotate(-ang);
+            }
+
+            // Calculo de Ángulos de las manecillas
+            let hourAngle = ((currentHour % 12) + currentMinute / 60) * (Math.PI / 6);
+            let minuteAngle = (currentMinute * Math.PI) / 30;
+
+            // Manecilla de Hora (Corta y Gruesa)
+            ctx.save();
+            ctx.rotate(hourAngle);
+            ctx.beginPath();
+            ctx.moveTo(0, 10);
+            ctx.lineTo(0, -radius * 0.5);
+            ctx.lineWidth = 6;
+            ctx.strokeStyle = '#818cf8'; // Indigo claro
+            ctx.lineCap = 'round';
+            ctx.stroke();
+            ctx.restore();
+
+            // Manecilla de Minutos (Larga y Delgada)
+            ctx.save();
+            ctx.rotate(minuteAngle);
+            ctx.beginPath();
+            ctx.moveTo(0, 15);
+            ctx.lineTo(0, -radius * 0.75);
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = (currentMinute > 30) ? '#f97316' : '#10b981'; // Naranja si es TO, Verde si es PAST
+            ctx.lineCap = 'round';
+            ctx.stroke();
+            ctx.restore();
+
+            // Centro del Reloj
+            ctx.beginPath();
+            ctx.arc(0, 0, 6, 0, 2 * Math.PI);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        // --- ACTUALIZAR INTERFAZ Y ESTADO ---
+        function updateUI() {
+            // Actualizar textos de los sliders
+            hourValDisplay.textContent = currentHour;
+            minuteValDisplay.textContent = currentMinute < 10 ? `0${currentMinute}` : currentMinute;
+
+            // Formato digital HH:MM
+            let formattedH = currentHour < 10 ? `0${currentHour}` : currentHour;
+            let formattedM = currentMinute < 10 ? `0${currentMinute}` : currentMinute;
+            digitalClockDisplay.textContent = `${formattedH}:${formattedM}`;
+
+            // Obtener estructura en inglés
+            let timeData = getEnglishTime(currentHour, currentMinute);
+
+            // Renderizar datos en UI
+            englishOutput.innerHTML = timeData.text;
+            subtextOutput.innerHTML = timeData.subtext;
+
+            zoneBadge.textContent = `LADO: ${timeData.zone}`;
+            zoneBadge.className = `px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-white shadow-sm transition-colors ${timeData.color}`;
+
+            // Redibujar reloj
+            drawClock();
+        }
+
+        function setTime(h, m) {
+            currentHour = h;
+            currentMinute = m;
+            hourSlider.value = h;
+            minuteSlider.value = m;
+            updateUI();
+        }
+
+        // Listeners para los Sliders
+        hourSlider.addEventListener('input', (e) => {
+            currentHour = parseInt(e.target.value);
+            updateUI();
+        });
+
+        minuteSlider.addEventListener('input', (e) => {
+            currentMinute = parseInt(e.target.value);
+            updateUI();
+        });
+
+        // --- LÓGICA DEL QUIZ INTERACTIVO ---
+        const quizQuestions = [
+            {
+                time: "02:15",
+                hour: 2,
+                minute: 15,
+                options: [
+                    "It's two o'clock.",
+                    "It's a quarter past two.",
+                    "It's a quarter to two.",
+                    "It's half past two."
+                ],
+                correct: 1,
+                explanation: "¡Correcto! El minuto 15 se expresa como 'a quarter past'."
+            },
+            {
+                time: "06:30",
+                hour: 6,
+                minute: 30,
+                options: [
+                    "It's half past six.",
+                    "It's six to thirty.",
+                    "It's a quarter to six.",
+                    "It's thirty to six."
+                ],
+                correct: 0,
+                explanation: "¡Excelente! 30 minutos es la mitad del reloj, por lo tanto usamos 'half past six'."
+            },
+            {
+                time: "08:45",
+                hour: 8,
+                minute: 45,
+                options: [
+                    "It's a quarter past eight.",
+                    "It's forty-five past eight.",
+                    "It's a quarter to nine.",
+                    "It's a quarter to eight."
+                ],
+                correct: 2,
+                explanation: "¡Muy bien! Minuto 45 es 'a quarter to' y avanzamos a la siguiente hora (nine)."
+            },
+            {
+                time: "10:10",
+                hour: 10,
+                minute: 10,
+                options: [
+                    "It's ten to ten.",
+                    "It's ten past ten.",
+                    "It's ten o'clock.",
+                    "It's ten to eleven."
+                ],
+                correct: 1,
+                explanation: "¡Acertaste! Son 10 minutos pasados de las 10: 'ten past ten'."
+            }
+        ];
+
+        let currentQuestionIdx = 0;
+        let score = 0;
+        let answered = false;
+
+        function loadQuizQuestion() {
+            answered = false;
+            let q = quizQuestions[currentQuestionIdx];
+
+            document.getElementById('current-q-num').textContent = currentQuestionIdx + 1;
+            document.getElementById('quiz-clock-display').textContent = q.time;
+            
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = '';
+
+            const feedbackEl = document.getElementById('quiz-feedback');
+            feedbackEl.className = 'hidden';
+
+            document.getElementById('next-btn').classList.add('hidden');
+            document.getElementById('restart-btn').classList.add('hidden');
+
+            q.options.forEach((opt, idx) => {
+                let btn = document.createElement('button');
+                btn.className = 'w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 font-medium text-sm text-slate-800 transition-all shadow-sm flex items-center justify-between group';
+                btn.innerHTML = `
+                    <span>${opt}</span>
+                    <i class="fa-regular fa-circle text-slate-300 group-hover:text-indigo-500"></i>
+                `;
+                btn.onclick = () => checkAnswer(idx, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIdx, btnElement) {
+            if (answered) return;
+            answered = true;
+
+            let q = quizQuestions[currentQuestionIdx];
+            const feedbackEl = document.getElementById('quiz-feedback');
+            const optionsBtns = document.getElementById('quiz-options-container').children;
+
+            // Deshabilitar todas las opciones
+            for (let b of optionsBtns) {
+                b.disabled = true;
+                b.classList.add('opacity-75', 'cursor-not-allowed');
+            }
+
+            if (selectedIdx === q.correct) {
+                score++;
+                document.getElementById('quiz-score').textContent = score;
+                
+                btnElement.className = 'w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 font-bold text-sm text-emerald-900 transition-all flex items-center justify-between';
+                btnElement.querySelector('i').className = 'fa-solid fa-circle-check text-emerald-600 text-lg';
+
+                feedbackEl.className = 'p-4 rounded-xl text-sm font-semibold flex items-center gap-3 bg-emerald-100 text-emerald-900 border border-emerald-200';
+                feedbackEl.innerHTML = `<i class="fa-solid fa-face-smile text-xl text-emerald-600"></i> <span>${q.explanation}</span>`;
+            } else {
+                btnElement.className = 'w-full text-left p-4 rounded-xl border-2 border-red-400 bg-red-50 font-bold text-sm text-red-900 transition-all flex items-center justify-between';
+                btnElement.querySelector('i').className = 'fa-solid fa-circle-xmark text-red-500 text-lg';
+
+                // Resaltar la correcta
+                optionsBtns[q.correct].className = 'w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 font-bold text-sm text-emerald-900 flex items-center justify-between';
+
+                feedbackEl.className = 'p-4 rounded-xl text-sm font-semibold flex items-center gap-3 bg-red-100 text-red-900 border border-red-200';
+                feedbackEl.innerHTML = `<i class="fa-solid fa-circle-exclamation text-xl text-red-500"></i> <span>¡Inténtalo de nuevo! La opción correcta era: "${q.options[q.correct]}"</span>`;
+            }
+
+            feedbackEl.classList.remove('hidden');
+
+            if (currentQuestionIdx < quizQuestions.length - 1) {
+                document.getElementById('next-btn').classList.remove('hidden');
+            } else {
+                document.getElementById('restart-btn').classList.remove('hidden');
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIdx < quizQuestions.length - 1) {
+                currentQuestionIdx++;
+                loadQuizQuestion();
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIdx = 0;
+            score = 0;
+            document.getElementById('quiz-score').textContent = score;
+            loadQuizQuestion();
+        }
+
+        // --- INICIALIZACIÓN AL CREGAR LA PÁGINA ---
+        window.onload = function() {
+            updateUI();
+            loadQuizQuestion();
+        };
+    </script>
+</body>
+</html>
